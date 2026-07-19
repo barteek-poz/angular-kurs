@@ -18,6 +18,7 @@ import { ComponentListState } from "./list-state.type";
       *ngIf="listState.state === 'success'"
       class="block mt-4"
       [tasks]="listState.results"
+      (onDelete) = "delete($event)"
     />
     <p *ngIf="listState.state === 'error'">{{ listState.error.message }}</p>
     <p *ngIf="listState.state === 'loading'">Loading...</p>
@@ -56,5 +57,20 @@ export class TaskListPageComponent {
         alert(response.message)
       }
     })
+  }
+
+  async delete(taskId: number) {
+   if (this.listState.state !== "success") return;
+
+   const res = await this.taskService.delete(taskId);
+   if(!(res instanceof Error)) {
+    this.listState = {
+      state: 'success', 
+      results: this.listState.results.filter(task => task.id !== taskId)
+    }
+   } else {
+    alert(res.message);
+   }
+    
   }
 }

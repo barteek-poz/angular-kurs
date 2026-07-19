@@ -1,4 +1,4 @@
-import { Component, inject, Input } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { Task } from "./Task";
 import { NgFor, NgIf } from "@angular/common";
 import { NgIconComponent, provideIcons } from "@ng-icons/core";
@@ -21,21 +21,27 @@ import { TasksService } from "./tasks.service";
   template: `
     <ul>
       <li *ngFor="let task of tasks" class="mb-2">
-        <div class="rounded-md shadow-md p-4 block" [class.bg-green-300]="task.done">
+        <div
+          class="rounded-md shadow-md p-4 block"
+          [class.bg-green-300]="task.done"
+        >
           <button
             class="w-full"
             (click)="handleSingleClick(task)"
-            (dblclick)="switchToEditMode()"
+            (dblclick)="switchToEditMode(task.id)"
           >
             <header class="flex justify-end">
-              <app-remove-item-button (confirm)="delete(task.id)"/>
+              <app-remove-item-button (confirm)="onDelete.emit(task.id)" />
             </header>
             <section class="text-left">
               <app-autosize-textarea
-                *ngIf="editMode; else previewModeTemplate"
+                *ngIf="
+                  editMode && task.id === currentTaskInEdit;
+                  else previewModeTemplate
+                "
                 (keyup.escape)="editMode = false"
                 [value]="task.name"
-                (submitText) = "update($event, task.id)"
+                (submitText)="update($event, task.id)"
               />
 
               <ng-template #previewModeTemplate>
@@ -56,19 +62,18 @@ import { TasksService } from "./tasks.service";
 })
 export class TasksListComponent {
   @Input({ required: true }) tasks: Task[] = [];
+  @Output() onDelete = new EventEmitter<number>();
 
   removeMode = false;
   editMode = false;
 
+  currentTaskInEdit: number | null = null;
+
   isSingleClick = true;
-  private tasksService = inject(TasksService)
+  private tasksService = inject(TasksService);
 
-  delete(taskId: number) {
-    this.tasksService.delete(taskId)
-  }
-
-  update(updatedName:string, taskId:number) {
-    this.tasksService.update(updatedName,taskId)
+  update(updatedName: string, taskId: number) {
+    this.tasksService.update(updatedName, taskId);
   }
 
   handleSingleClick(task: Task) {
@@ -81,9 +86,10 @@ export class TasksListComponent {
     }, 150);
   }
 
-  switchToEditMode() {
+  switchToEditMode(taskId: number) {
     this.isSingleClick = false;
     this.editMode = true;
+    this.currentTaskInEdit = taskId;
   }
 
   toggleDoneStatus(task: Task) {
@@ -92,6 +98,6 @@ export class TasksListComponent {
 }
 
 // TO DO
-// 1. Usuwanie bez koniecznosci odswiezenia 
-// 2. Jednoczesna edycja tylko jednego taska
+// 1. Usuwanie bez koniecznosci odswiezenia / DONE
+// 2. Jednoczesna edycja tylko jednego taska / DONE
 // 3. Przy edycji enter chowa tekst
