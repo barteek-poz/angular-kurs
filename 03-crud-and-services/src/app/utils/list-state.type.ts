@@ -1,4 +1,4 @@
-import { Task } from "./task/Task";
+
 
 export type ListFetchingError = { status: number; message: string };
 
@@ -26,3 +26,8 @@ export type ComponentListState<T> =
   | LoadingState
   | SuccessState<T>
   | ErrorState;
+
+export type TaskUpdatePayload = {
+  name? :string, 
+  done? : boolean
+}

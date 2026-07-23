@@ -4,7 +4,7 @@ import { SubmitTextComponent } from "../ui/submit-text.component";
 import { Task } from "./model/Task";
 import { NgIf } from "@angular/common";
 import { addTasks, getTasks, TasksService } from "./data-access/tasks.service";
-import { ComponentListState } from "../utils/list-state.type";
+import { ComponentListState, TaskUpdatePayload } from "../utils/list-state.type";
 
 @Component({
   selector: "app-task-list-page",
@@ -21,6 +21,7 @@ import { ComponentListState } from "../utils/list-state.type";
       class="block mt-4"
       [tasks]="listState.results"
       (onDelete)="delete($event)"
+      
     />
     <p *ngIf="listState.state === 'error'">{{ listState.error.message }}</p>
     <p *ngIf="listState.state === 'loading'">Loading...</p>
@@ -74,4 +75,5 @@ export class TaskListPageComponent {
       alert(res.message);
     }
   }
+
 }

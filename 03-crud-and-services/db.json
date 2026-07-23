@@ -2,7 +2,7 @@
   "tasks": [
     {
       "id": 1,
-      "name": "Angular introduction",
+      "name": "Angular introduction\n\n",
       "done": false,
       "createdAt": 1693042928127
     },
@@ -17,12 +17,6 @@
       "name": "Learn services (again)\n\n",
       "done": false,
       "id": 4
-    },
-    {
-      "createdAt": 1784484594420,
-      "name": "test 2 sd\nsdasdasd\n\n",
-      "done": false,
-      "id": 5
     }
   ]
 }
