@@ -1,16 +1,17 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, Output, Pipe, PipeTransform } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Task } from '../model/Task';
 import { TasksService } from '../data-access/tasks.service';
 import { NgIconComponent, provideIcons } from "@ng-icons/core";
 import { AutosizeTextareaComponent } from 'src/app/ui/autosize-textarea.component';
 import { RemoveItemButtonComponent } from 'src/app/ui/remove-item-button.component';
 import { TaskUpdatePayload } from 'src/app/utils/list-state.type';
-
+import { CustomDatePipe } from 'src/app/utils/pipes/custom-date-pipe';
+ 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CommonModule, RemoveItemButtonComponent, AutosizeTextareaComponent, NgIconComponent],
+  imports: [CommonModule, RemoveItemButtonComponent, AutosizeTextareaComponent, NgIconComponent, CustomDatePipe],
   template: `
     <div
           class="rounded-md shadow-md p-4 block"
@@ -42,7 +43,7 @@ import { TaskUpdatePayload } from 'src/app/utils/list-state.type';
               </ng-template>
             </section>
             <footer class=" pt-2 flex items-center justify-end">
-              <ng-icon name="featherCalendar" class="text-sm" />
+              <ng-icon [title]="task.createdAt | customDate" name="featherCalendar" class="text-sm" />
             </footer>
           </button>
         </div>
@@ -58,7 +59,9 @@ export class TaskCardComponent {
   removeMode = false;
   editMode = false;
 
-   
+  formatDate() {
+    return new Intl.DateTimeFormat('pl').format(this.task.createdAt);
+  }
 
   isSingleClick = true;
   
