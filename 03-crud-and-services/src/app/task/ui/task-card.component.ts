@@ -6,7 +6,7 @@ import { NgIconComponent, provideIcons } from "@ng-icons/core";
 import { AutosizeTextareaComponent } from 'src/app/ui/autosize-textarea.component';
 import { RemoveItemButtonComponent } from 'src/app/ui/remove-item-button.component';
 import { TaskUpdatePayload } from 'src/app/utils/list-state.type';
-import { CustomDatePipe } from 'src/app/utils/pipes/custom-date-pipe';
+import { CustomDatePipe } from 'src/app/utils/custom-date-pipe';
  
 @Component({
   selector: 'app-task-card',
